@@ -22,7 +22,7 @@ Choose the funky or big alien in PLAYER. Move with WASD/arrows; select gifts wit
 8. Doorway: teleport safely near an uncollected part (or the exit).
 9. Umbrella: float above locals and avoid contact damage for 12 seconds.
 
-Ground presents show matching item icons. The toolbar displays inventory and animated active effects. Locals patrol around their home, notice you only inside a 120–190 unit radius depending on type, and give up beyond 330 units. Exclamation marks show active pursuit. Enemies spawn at least 600 units away from your landing point.
+Ground presents show matching item icons. The compact top-right toolbar shows only icons for owned or active gifts, hiding empty slots. Active icons animate and have a small duration bar; hover for item names and remaining time. The toolbar disappears when empty. Locals patrol around their home, notice you only inside a 120–190 unit radius depending on type, and give up beyond 330 units. Exclamation marks show active pursuit. Enemies spawn at least 600 units away from your landing point.
 
 ## Development
 `npm test` runs gameplay and transition tests. `public/world.js` contains simulation and generation; `public/game.js` renders the game; `public/transition.js` controls travel timing. The static Node server uses port 3000, configurable with `PORT`.
