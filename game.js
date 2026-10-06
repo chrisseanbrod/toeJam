@@ -1,6 +1,6 @@
-import {LevelTransition} from './transition.js?v=big-islands-4';
-import {giftIcons,giftSvg} from './gift-art.js?v=big-islands-4';
-import {createWorld,step,openPresent,onLand,GIFT_TYPES,nextWorld,LEVEL_COUNT} from './world.js?v=big-islands-4';
+import {LevelTransition} from './transition.js?v=compact-icons-5';
+import {giftIcons,giftSvg} from './gift-art.js?v=compact-icons-5';
+import {createWorld,step,openPresent,onLand,GIFT_TYPES,nextWorld,LEVEL_COUNT} from './world.js?v=compact-icons-5';
 const canvas=document.querySelector('canvas'),c=canvas.getContext('2d'),overlay=document.querySelector('#overlay'),play=document.querySelector('#play');
 let world=createWorld(),active=false,paused=false,last=0,toastTimer,selectedGift='sneakers';const keys=new Set();const transition=new LevelTransition();const travel=document.querySelector('#level-travel');
 function toast(message){const el=document.querySelector('#toast');el.textContent=message;el.style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.style.display='none',2800);}
@@ -10,24 +10,29 @@ addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight
 
 const slots=GIFT_TYPES.map((type,i)=>{
  const button=document.createElement('button');button.className=`gift-slot gift-${type.id}`;
- button.innerHTML=`${giftSvg(type.id)}<span class="gift-name">${type.name}</span><span class="quantity"></span><span class="timer"></span><span class="duration-track"><span></span></span>`;
+ button.innerHTML=`${giftSvg(type.id)}<span class="quantity" aria-hidden="true"></span><span class="duration-track" aria-hidden="true"><span></span></span>`;
  button.onclick=()=>{selectedGift=type.id;if(active&&!paused&&!transition.running)toast(openPresent(world,type.id));updateToolbar();};document.querySelector('#gift-slots').append(button);return button;
 });
-const activePanel=document.querySelector('#active-present');
+
 function giftTime(kind){return kind==='sneakers'?world.player.boost:world.player.effects[kind]||0;}
-let panelSignature='';
+
 function updateToolbar(){
+ let visible=0;
  GIFT_TYPES.forEach((type,i)=>{
   const b=slots[i],count=world.player.inventory[type.id],timer=giftTime(type.id);
-  b.classList.toggle('selected',selectedGift===type.id);b.classList.toggle('empty',count===0&&timer===0);b.classList.toggle('powered',timer>0);b.disabled=!active||paused||transition.running||count===0;
-  b.setAttribute('aria-pressed',String(selectedGift===type.id));b.setAttribute('aria-label',`${type.name}: ${count}. ${type.description}. Click to use.`);b.title=`${i+1}: ${type.name} — ${type.description}`;
-  b.querySelector('.quantity').textContent=`×${count}`;b.querySelector('.timer').textContent=timer>0?`${Math.ceil(timer)}s ACTIVE`:count>0?'CLICK TO USE':'NOT COLLECTED';
+  b.hidden=count===0&&timer===0;if(!b.hidden)visible++;
+  b.classList.toggle('selected',selectedGift===type.id);b.classList.toggle('powered',timer>0);
+  b.disabled=!active||paused||transition.running||count===0;
+  b.setAttribute('aria-pressed',String(selectedGift===type.id));
+  const state=timer>0?`Active: ${Math.ceil(timer)} seconds left.`:'';
+  b.setAttribute('aria-label',`${type.name}: ${count} in inventory. ${state} ${type.description}.`);
+  b.title=`${i+1}: ${type.name} — ${count} in inventory. ${state} ${type.description}`;
+  b.querySelector('.quantity').textContent=count>1?String(count):'';
+  b.querySelector('.duration-track').hidden=timer===0;
   b.querySelector('.duration-track span').style.width=`${100*timer/type.duration}%`;
  });
- const running=GIFT_TYPES.filter(t=>giftTime(t.id)>0);const signature=running.map(t=>t.id).join(',');
- if(signature!==panelSignature||!activePanel.children.length){panelSignature=signature;activePanel.innerHTML=running.length?running.map(t=>`<div class="active-item gift-${t.id}" data-kind="${t.id}">${giftSvg(t.id)}<div><strong>${t.name}</strong><span class="active-description">${t.description}</span></div><b class="active-time"></b></div>`).join(''):'<div class="active-empty">No active gift · collect an item below, then click its icon to use it.</div>';}
- for(const item of activePanel.querySelectorAll('.active-item'))item.querySelector('.active-time').textContent=`${Math.ceil(giftTime(item.dataset.kind))}s`;
- document.querySelector('#gift-toolbar').classList.toggle('paused',paused||!active||transition.running);
+ const toolbar=document.querySelector('#gift-toolbar');toolbar.hidden=visible===0;
+ toolbar.classList.toggle('paused',paused||!active||transition.running);
 }
 
 function ellipse(x,y,rx,ry,color){c.fillStyle=color;c.beginPath();c.ellipse(x,y,rx,ry,0,0,Math.PI*2);c.fill();}
