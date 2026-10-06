@@ -1,12 +1,30 @@
 # Cosmic Castaways
-An original browser exploration game inspired by the offbeat exploration of classic console games. All graphics are drawn in code; no extracted console artwork, music, or assets are used.
+A retro browser exploration game with hand-drawn Canvas graphics. No extracted console artwork, music, or assets are used.
 
-## Play on Windows
-Install Node.js 20 or newer. Open a terminal in this folder and run `npm start`. Open http://localhost:3000 in your browser. No dependency installation is needed.
+## Play
+Online: https://chrisseanbrod.github.io/toeJam/
 
-Choose the funky or big alien using the PLAYER menu. Move with WASD or arrow keys. Collect three golden ship parts on each of three islands, then enter the elevator at the north end. Collect wrapped presents to add identified items to the top-right gift toolbar. Click a gift to use it, or select with 1/2/3 and press Space. Rocket sneakers increase speed, snacks restore two hearts, and shields protect you. Unused gifts carry between islands. The toolbar shows the actual item icons; the ACTIVE PRESENTS panel animates running effects and counts down their duration. Ground presents have distinct packaging and matching content icons. Avoid dancers, lawnmower locals, devils, walking mailboxes, and bees. P pauses; New Expedition restarts.
+For Windows development, install Node.js 20 or newer, open a terminal in this folder, run `npm start`, and open http://localhost:3000. No package installation or credentials are needed.
+
+## Campaign
+Explore ten islands, growing from 3,200 × 3,200 to 4,100 × 4,100. Each island has a different coastline, item and enemy placement, and rotating landscape colours. Find three ship parts, then enter the elevator in the north. Landing, elevator journeys, and the final escape are animated. The minimap marks your position, remaining ship parts, and the elevator.
+
+Choose the funky or big alien in PLAYER. Move with WASD/arrows; select gifts with 1–9, then Space, or click an icon. P pauses; New Expedition restarts. Health, gifts, and remaining effect durations carry between levels.
+
+## Gifts
+1. Rocket sneakers: run faster for 8 seconds.
+2. Cosmic snack: restore two hearts.
+3. Disco shield: protection for 10 seconds.
+4. Spring shoes: bounce faster and avoid contact damage for 12 seconds.
+5. Tomato launcher: automatically shoot nearby locals for 15 seconds.
+6. Boom box: make locals within 420 units stop and dance for 10 seconds.
+7. Invisibility: break pursuit and avoid detection/contact damage for 10 seconds.
+8. Doorway: teleport safely near an uncollected part (or the exit).
+9. Umbrella: float above locals and avoid contact damage for 12 seconds.
+
+Ground presents show matching item icons. The toolbar displays inventory and animated active effects. Locals patrol around their home, notice you only inside a 120–190 unit radius depending on type, and give up beyond 330 units. Exclamation marks show active pursuit. Enemies spawn at least 600 units away from your landing point.
 
 ## Development
-`npm test` runs gameplay tests. The game uses native Canvas and JavaScript modules with a small Node static server. Edit `public/world.js` for simulation and `public/game.js` for rendering. `PORT` optionally sets the server port.
+`npm test` runs gameplay and transition tests. `public/world.js` contains simulation and generation; `public/game.js` renders the game; `public/transition.js` controls travel timing. The static Node server uses port 3000, configurable with `PORT`.
 
-This first prototype is single player with three difficulty levels using the same island layout. Co-op, audio, procedural islands, and gamepad/touch support are future features. No external assets or credentials are required.
+Single-player prototype; co-op, audio, gamepads, and touch controls are future features. GitHub Pages serves the contents of `public/` from the `gh-pages` branch.
